@@ -27,9 +27,10 @@
 var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
 $("#send").on("click", function() {
   var msg = $("#msg_text").val();
-  dispatcher.trigger('echo', msg);
+  dispatcher.trigger('chat', msg);
+  //onsole.log(msg);
   });
-dispatcher.bind('echo', function(msg) {
+dispatcher.bind('chat', function(msg) {
     console.log(msg);
     $("#logs").prepend('<li>'+msg+" ["+Date().toLocaleString() + ']</li>');
 });
