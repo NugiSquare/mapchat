@@ -2,19 +2,36 @@
 <div class="container-fluid">
   <div class="row mbody">
     <div class="allchat_div" style="width:25%; float:left;"><!---------------------------------------------------전체 채팅-->
-      <div class="allchat" id="allchat_current"><!--current_user.count-->
-      
+      <div><!--current_user.count-->
       </div>
-      
       
       <div class="allchat" id="allchat_content"><!--chat content-->
-
+        <ul id="logs">
+        </ul>
       </div>
 
-      <div class="allchat" id="allchat_input"><!--채팅 입력하는 곳 (chat input)-->
-        <textarea style="margin:10px 0px 5px 23px; width:73%; height:90px; resize: none; border-top-left-radius: 10px; border-bottom-left-radius: 10px;float:left;"></textarea>
-        <input type="submit" name="" value="전송" style="margin:10px 0px 15px 0px; height:90px; border-top-right-radius:10px; border-bottom-right-radius:10px; overflow:hidden;border:none;width: 17%;background-color:#F7931D;">
-      </div>
+      <!--<div class="allchat" id="allchat_input">-->
+      <!--채팅 입력하는 곳 (chat input)-->
+      
+      
+        <!--<textarea style="margin:10px 0px 5px 23px; width:73%; height:90px; resize: none; border-top-left-radius: 10px; border-bottom-left-radius: 10px;float:left;"></textarea>-->
+        <!--<input type="submit" name="" value="전송" style="margin:10px 0px 15px 0px; height:90px; border-top-right-radius:10px; border-bottom-right-radius:10px; overflow:hidden;border:none;width: 17%;background-color:#F7931D;">-->
+        <div class="panel-footer" style="height:100px;">
+          <div class="input-group"style="margin-left: 10px;">
+            <div class="row">
+              <div class="col-md-10">
+                <textarea class="form-control" rows="3"  style="margin:10px 0px 5px 23px; padding: 0px 0px 0px 0px; width:73%; border-top-left-radius: 10px; border-bottom-left-radius: 10px; resize: none; float:left;" id="btn-input"></textarea>
+              </div>
+              <div class="col-md-2">
+                <input type="submit" class="btn btn-likelion btn-md" id="btn-chat" style="margin:10px 0px 15px 0px; height:72px; overflow:hidden; border-top-right-radius:10px; border-bottom-right-radius:10px;">전송!!</input>
+              </div>
+            </div>
+              <!--<input id="btn-input" type="textarea"rows="3" class="form-control input-md chat_input" placeholder="Write your message here..." />-->
+              <!--<span class="input-group-btn">-->
+              <!--<input type="submit" class="btn btn-likelion btn-md" id="btn-chat">전송!!</button>-->
+          </div>
+        </div>
+      <!--</div>-->
     </div>
     
     <div class="" style="width:75%; padding:0px; overflow:hidden;"><!---------------------------------------------------구글 맵---->
@@ -27,16 +44,16 @@
   </div>
 </div> <!-- /container -->
 <!--여기부터 채팅-->
-<div class="col-lg-12">
-  <h1>Chat</h1>
-  <input type="text" id="msg_text">
-  <input type="submit" id="send">
-</div>
-<div class="col-lg-12">
-  <h1>Logs</h1>
-  <ul id="logs">
-  </ul>
-</div>
+<!--<div class="col-lg-12">-->
+<!--  <h1>Chat</h1>-->
+<!--  <input type="text" id="msg_text">-->
+<!--  <input type="submit" id="send">-->
+<!--</div>-->
+<!--<div class="col-lg-12">-->
+<!--  <h1>Logs</h1>-->
+<!--  <ul id="logs">-->
+<!--  </ul>-->
+<!--</div>-->
 
 <div class="modal fade">
   <div class="modal-dialog">
@@ -48,8 +65,8 @@
       </div>
       <div class="modal-body">
         방 제목 : <input type="text" name="title"> <br>
-        <input type="hidden" name="lat_input" value="37"><br>
-        <input type="hidden" name="lng_input" value="132"><br>
+        <input type="hidden" id="lat_input" name="lat" value="37"><br>
+        <input type="hidden" id="lng_input" name="lng" value="132"><br>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
@@ -61,17 +78,25 @@
 </div><!-- /.modal -->
 
 <script>
-var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
-var username =  "<%= current_user ? current_user.email : "손님" %>";
-  $("#send").on("click", function() {
-    var msg = $("#msg_text").val();
-    dispatcher.trigger('chat', {"channel_id" : "1", "content" : msg, "username" : username});
+  var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
+  var username = "<%= current_user ? current_user.username : "손님" %>";
+  var channel = dispatcher.subscribe("1");  
+  var univ = "<%=current_user.univ%>"
+  $("#btn-input").keypress(function(event){
+    if(event.keyCode == 13){
+        $("#btn-chat").click();
+    }
   });
-  
-  dispatcher.bind('chat', function(msg) {
+  $("#btn-chat").on("click", function() {
+    var msg = $("#btn-input").val();
+    channel.trigger('chat', {"channel_id" : 1, "content" : msg, "username" : username, "univ" : univ});
+    $("#btn-input").val("");
+  });
+    
+  channel.bind('chat', function(msg) {
     console.log(msg);
-    $("#logs").prepend('<li>'+msg+" ["+Date().toLocaleString() + ']</li>');
-});
+    $("#logs").prepend('<li>'+ msg["channel_id"] + " | " + msg["univ"] +" | "+ msg["username"] + ': ' + msg["content"] + '[' + Date().toLocaleString() + ']</li>');
+  });
 </script>
 
 
@@ -112,6 +137,22 @@ var username =  "<%= current_user ? current_user.email : "손님" %>";
 .text_color {
   color: white
 }
+
+/*전체채팅 쌓이도록*/
+
+
+
+ul {
+    transform: rotate(180deg);
+}
+ul > li {
+    transform: rotate(-180deg);
+}
+
+
+/*end*/
+
+
 </style>
 
 <script type="text/javascript">
@@ -137,11 +178,26 @@ function initialize() {
         lat: <%= c.lat ? c.lat : "37" %>,
         lng: <%= c.lng ? c.lng : "132" %>
       },
-      radius: Math.sqrt(603502) * 100
+      radius: Math.sqrt(60) * 100
     });
+    <!--
     var marker = new google.maps.Marker({
-        position: pos
+        position: pos,
+        //label: <%=c.title%>
     });
+    -->
+    var marker = new MarkerWithLabel({
+        position: pos,
+        // icon: mapStyles.uavSymbolBlack,
+        labelContent: "<%=c.title%> (<%=c.user.username%>)",
+        labelAnchor: new google.maps.Point(95, 20),
+        labelClass: "markerlabels",
+        labelStyle: {
+            opacity: 1
+        },
+        zIndex: 999999,
+        map: map
+    })
     
     marker.setMap(map);
     google.maps.event.addListener(marker, 'click', function(e) {

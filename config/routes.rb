@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'chat/:channel_id' => 'home#chat'
   post 'home/create_chat'
   get 'home/chat_test'
+  get 'home/destroy_chat/:id' => 'home#destroy_chat'
   
   root 'home#index'
 

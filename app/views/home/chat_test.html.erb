@@ -21,6 +21,6 @@ $("#send").on("click", function() {
 });
 channel.bind('chat', function(msg) {
   console.log(msg);
-  $("#logs").prepend('<li>' + username + ': ' + msg + '[' + Date().toLocaleString() + ']</li>');
+  $("#logs").prepend('<li>' +univ+" "+ username + ': ' + msg + '[' + Date().toLocaleString() + ']</li>');
 });
 </script>

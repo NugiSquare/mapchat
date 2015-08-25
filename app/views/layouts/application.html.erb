@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Map Chat</title>
+  <title>SerengeTalk</title>
+  <link rel="icon" type="image/png" href="/serengeticon.png" /> <%# 파비콘 설정 %>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtZeWmQ7w9Wx4pY_6skY932Hte3XlySls"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAtZeWmQ7w9Wx4pY_6skY932Hte3XlySls"></script>
+  <script src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
   <%= csrf_meta_tags %>
   <!--google맵 스타일시트--->
   
@@ -15,23 +20,22 @@
 </head>
 <body>
   <!-- Static navbar -->
-  <nav class="navbar navbar-default navbar-static-top" style="background-color:#778899; color:#fff; font-weight:bold;  margin-bottom: 0px;">
+  <nav class="navbar navbar-default navbar-static-top" style="background-color:#093052; font-weight:bold;  margin-bottom: 0px;">
     <div class="container-fluid">
      <div  class="collapse navbar-collapse" id="navbarCollapse">
         <div class="row">
-          <div class="col-md-3"><p id="main_title">세렝게티</p><!--제목부분 추후에 이미지로 바꿈--></div><!--로고도 추후에 이미지로 바꿈-->
+          <div class="col-md-3"><p id="main_title"></p><!--제목부분 추후에 이미지로 바꿈--></div><!--로고도 추후에 이미지로 바꿈-->
           <div class="col-md-6">
           <center>
-          <img src="../../assets/세렝게티로고.jpg" style="width: 35%; height: 10%; margin: 10px;">
+          <a href="/home/index"><img src="/serengeti.png" style="width: 30%; height: 8%; margin: 6px;"></a>
           </center>
           </div>
           <div class="col-md-3">
             <ul class="nav navbar-nav">
               <% if current_user.nil? %>
-              <li><a href="/users/sign_in"><span class="text_color">Sign in</span></a></li>
-              <li><a href="/users/sign_up"><span class="text_color">Sign up</span></a></li>
+              <li><a href="/users/sign_in"><span class="top_text">Sign in</span></a></li>
               <% else%>
-              <li><a href="/users/sign_out" data-method="delete">Sign out</a></li>
+              <li><a href="/users/sign_out" data-method="delete"><span class="top_text">Sign out</span></a></li>
               <% end %>
             </ul>
           </div>
