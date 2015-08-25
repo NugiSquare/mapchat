@@ -189,7 +189,7 @@ function initialize() {
     var marker = new MarkerWithLabel({
         position: pos,
         // icon: mapStyles.uavSymbolBlack,
-        labelContent: "<%=c.title%> (<%=c.user.username%>)",
+        labelContent: "<h3><%=c.title%> (<%=c.user.username%>)<h3>",
         labelAnchor: new google.maps.Point(95, 20),
         labelClass: "markerlabels",
         labelStyle: {
