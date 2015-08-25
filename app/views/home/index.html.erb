@@ -1,13 +1,36 @@
-  <div class="container">
+<div class="container">
+
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <h1>Navbar example</h1>
+  <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+  <p>To see the difference between static and fixed top navbars, just scroll.</p>
+  <p>
+    <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+  </p>
+</div>
+
+</div> <!-- /container -->
   
-    <!-- Main component for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <h1>Navbar example</h1>
-      <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-      <p>To see the difference between static and fixed top navbars, just scroll.</p>
-      <p>
-        <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-      </p>
-    </div>
-  
-  </div> <!-- /container -->
+<div class="col-lg-12">
+  <h1>Chat</h1>
+  <input type="text" id="msg_text">
+  <input type="submit" id="send">
+</div>
+<div class="col-lg-12">
+  <h1>Logs</h1>
+  <ul id="logs">
+  </ul>
+</div>
+
+<script>
+var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
+$("#send").on("click", function() {
+  var msg = $("#msg_text").val();
+  dispatcher.trigger('echo', msg);
+  });
+dispatcher.bind('echo', function(msg) {
+    console.log(msg);
+    $("#logs").prepend('<li>'+msg+" ["+Date().toLocaleString() + ']</li>');
+});
+</script>
