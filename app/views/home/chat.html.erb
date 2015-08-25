@@ -1,0 +1,26 @@
+<!--여기부터 채팅-->
+<div class="col-lg-12">
+  <h1>Chat</h1>
+  <input type="text" id="msg_text">
+  <input type="submit" id="send">
+</div>
+<div class="col-lg-12">
+  <h1>Logs</h1>
+  <ul id="logs">
+  </ul>
+</div>
+
+<script>
+var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
+var username =  "<%= current_user.username %>";
+var channel = dispatcher.subscribe("<%=@channel.id%>");
+$("#send").on("click", function() {
+  var msg = $("#msg_text").val();
+  channel.trigger('chat', {"channel_id" : "<%=@channel.id%>", "content" : msg, "username" : username});
+  // console.log(msg);
+  });
+  channel.bind('chat', function(msg) {
+    console.log(msg);
+  $("#logs").prepend('<li>' + msg["channel_id"] + " | " + msg["username"] + ': ' + msg["content"] + '[' + Date().toLocaleString() + ']</li>');
+});
+</script>

@@ -1,17 +1,32 @@
-<div class="container">
+<!---->
+<div class="container-fluid">
+  <div class="row mbody">
+    <div class="allchat_div" style="width:25%; float:left;"><!---------------------------------------------------전체 채팅-->
+      <div class="allchat" id="allchat_current"><!--current_user.count-->
+      
+      </div>
+      
+      
+      <div class="allchat" id="allchat_content"><!--chat content-->
 
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron">
-  <h1>Navbar example</h1>
-  <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-  <p>To see the difference between static and fixed top navbars, just scroll.</p>
-  <p>
-    <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-  </p>
-</div>
+      </div>
 
+      <div class="allchat" id="allchat_input"><!--채팅 입력하는 곳 (chat input)-->
+        <textarea style="margin:10px 0px 5px 23px; width:73%; height:90px; resize: none; border-top-left-radius: 10px; border-bottom-left-radius: 10px;float:left;"></textarea>
+        <input type="submit" name="" value="전송" style="margin:10px 0px 15px 0px; height:90px; border-top-right-radius:10px; border-bottom-right-radius:10px; overflow:hidden;border:none;width: 17%;background-color:#F7931D;">
+      </div>
+    </div>
+    
+    <div class="" style="width:75%; padding:0px; overflow:hidden;"><!---------------------------------------------------구글 맵---->
+    <div style="width: 100%; height: 100%;">
+         <div id="map" style="height: 900px;"></div>
+    </div>
+        
+      <!--구글 맵 들어가는 부분-->
+    </div>
+  </div>
 </div> <!-- /container -->
-  
+<!--여기부터 채팅-->
 <div class="col-lg-12">
   <h1>Chat</h1>
   <input type="text" id="msg_text">
@@ -23,15 +38,128 @@
   </ul>
 </div>
 
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= form_tag '/home/create_chat' do %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">새로운 채팅방 만들기</h4>
+      </div>
+      <div class="modal-body">
+        방 제목 : <input type="text" name="title"> <br>
+        <input type="hidden" name="lat_input" value="37"><br>
+        <input type="hidden" name="lng_input" value="132"><br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+        <input type="submit" class="btn btn-primary" value="방 만들기!">
+      </div>
+      <% end %>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
 var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
-$("#send").on("click", function() {
-  var msg = $("#msg_text").val();
-  dispatcher.trigger('chat', msg);
-  //onsole.log(msg);
+var username =  "<%= current_user ? current_user.email : "손님" %>";
+  $("#send").on("click", function() {
+    var msg = $("#msg_text").val();
+    dispatcher.trigger('chat', {"channel_id" : "1", "content" : msg, "username" : username});
   });
-dispatcher.bind('chat', function(msg) {
+  
+  dispatcher.bind('chat', function(msg) {
     console.log(msg);
     $("#logs").prepend('<li>'+msg+" ["+Date().toLocaleString() + ']</li>');
 });
+</script>
+
+
+<style>/* 현재 페이지 CSS 입니다. 추후 render로 빼두는 편이 나을것 같습니다. */
+/**전체채팅창start**/
+.mbody{
+  height:900px;
+}
+.container-fluid{
+  height:100%;
+  padding-left:0px;
+  padding-right:0px;
+}
+.allchat_div{
+  padding:0px;
+}
+.allchat{
+  width:100%;
+  padding:0px;
+}
+
+#allchat_current{
+  height: 80px;
+  background-color:#E8D4D4;
+  
+}  
+
+#allchat_content{
+  height: 670px;
+  background-color:#fff;
+}
+
+#allchat_input{
+  height: 150px;
+  background-color:#3366FF;
+}
+
+.text_color {
+  color: white
+}
+</style>
+
+<script type="text/javascript">
+function initialize() {
+  var mapOptions = {
+    center: { lat: 37, lng: 132},
+    zoom: 8
+  };
+  var map = new google.maps.Map(document.getElementById('map'),
+      mapOptions);
+    
+  <% @channels.each do |c| %>
+    var pos = new google.maps.LatLng(<%= c.lat ? c.lat : "37" %>, 
+                                    <%= c.lng ? c.lng : "132" %>);
+    var cityCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: {
+        lat: <%= c.lat ? c.lat : "37" %>,
+        lng: <%= c.lng ? c.lng : "132" %>
+      },
+      radius: Math.sqrt(603502) * 100
+    });
+    var marker = new google.maps.Marker({
+        position: pos
+    });
+    
+    marker.setMap(map);
+    google.maps.event.addListener(marker, 'click', function(e) {
+       window.open('/chat/<%=c.id%>', '_blank', 'width=400, height=400, toolbar=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no');
+       return false;
+    });
+  <% end %>
+  google.maps.event.addListener(map, 'click', function(e) {
+   var lat = e.latLng.lat();
+   var lng = e.latLng.lng();
+   
+   $('#lat_input').val(lat);
+   $('#lng_input').val(lng);
+   
+   $('.modal').modal();
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
 </script>

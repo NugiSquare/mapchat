@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
   get 'home/index'
+  get 'chat/:channel_id' => 'home#chat'
+  post 'home/create_chat'
+  get 'home/chat_test'
   
   root 'home#index'
 

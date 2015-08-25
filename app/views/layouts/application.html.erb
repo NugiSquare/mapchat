@@ -3,51 +3,43 @@
 <head>
   <title>Map Chat</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtZeWmQ7w9Wx4pY_6skY932Hte3XlySls"></script>
   <%= csrf_meta_tags %>
+  <!--google맵 스타일시트--->
+  
+  <!-- 구글맵 end-->
+  
 </head>
 <body>
   <!-- Static navbar -->
-  <nav class="navbar navbar-default navbar-static-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/">Map Chat</a>
-      </div>
-      <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="/">Home</a></li>
-          <!--
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li class="dropdown-header">Nav header</li>
-              <li><a href="#">Separated link</a></li>
-              <li><a href="#">One more separated link</a></li>
+  <nav class="navbar navbar-default navbar-static-top" style="background-color:#778899; color:#fff; font-weight:bold;  margin-bottom: 0px;">
+    <div class="container-fluid">
+     <div  class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="row">
+          <div class="col-md-3"><p id="main_title">세렝게티</p><!--제목부분 추후에 이미지로 바꿈--></div><!--로고도 추후에 이미지로 바꿈-->
+          <div class="col-md-6">
+          <center>
+          <img src="../../assets/세렝게티로고.jpg" style="width: 35%; height: 10%; margin: 10px;">
+          </center>
+          </div>
+          <div class="col-md-3">
+            <ul class="nav navbar-nav">
+              <% if current_user.nil? %>
+              <li><a href="/users/sign_in"><span class="text_color">Sign in</span></a></li>
+              <li><a href="/users/sign_up"><span class="text_color">Sign up</span></a></li>
+              <% else%>
+              <li><a href="/users/sign_out" data-method="delete">Sign out</a></li>
+              <% end %>
             </ul>
-          </li>
-          -->
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/users/sign_in">Sign in</a></li>
-          <li><a href="/users/sign_up">Sign up</a></li>
-          <li><a href="/users/sign_out" data-method="delete">Sign out</a></li>
-        </ul>
-      </div><!--/.nav-collapse -->
-    </div>
+          </div>
+        </div>
+      </div>
+
+      <!--/.nav-collapse -->
+
   </nav>
 
   <%= yield %>

@@ -1,29 +1,189 @@
-<h2>Sign up</h2>
+<div class="container">
+  <div class="col-xs-10 col-sm-10 col-md-4 col-md-offset-4 col-xs-8 col-xs-offset-2">
+   <%# <center><img src = "/serengeti.png" class = "serengeti"/></center><%# 로고 얼굴 붙임 %>
+   
+      <center> 
+        <div>
+         <p class = "login-title">Sign up</p>
+         <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+         <%= devise_error_messages! %>
+        </div>
+     </center>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <div class = "login-description">
+      <center>* 클래스 라이언 아이디와 비밀번호로 로그인하세요 * </center>
+    </div>
+    
+        <div class="form-group">
+          <center>
+            <div class="field" style="margin-top:30px;">
+            <%= f.label :email %> &nbsp
+            <%= f.email_field :email, autofocus: true %>
+            </div>
+          </center>
+        </div>
+        
+        <div class="form-group">
+          <center>
+           <div class="field">
+            <%= f.label :password %>
+            <% if @minimum_password_length %> &nbsp
+            <% end %>
+            <%= f.password_field :password, autocomplete: "off" %>
+          </div>
+          </center>
+        </div>
+                <div class="form-group">
+          <center>
+           <div class="field">
+            <%= f.label :password_confirmation %>
+            <% if @minimum_password_length %> &nbsp
+            <% end %>
+            <%= f.password_field :password_confirmation, autocomplete: "off" %>
+          </div>
+          </center>
+        </div>
+        
+        <div class="form-action">
+          <center>
+          <div class="actions">
+            <%= f.submit "Sign up" %>
+          </div>
+          </center>
+        <% end %>
+        <center> <%= render "devise/shared/links" %> </center>
+      </form>
   </div>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
-  </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
 
-<%= render "devise/shared/links" %>
+<style>
+
+@import 'bootstrap';
+
+/*
+.serengeti{
+  margin-top: 120px;
+  width:100%;
+  height:100%;
+}
+*/
+
+body{
+  background-image: url("/connection.jpg"); //테스트중
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container {
+  width: 1170px;
+  max-width: none !important;
+}
+
+
+.navbar{
+  margin-bottom: 10px;
+}
+
+.nav-margin{
+  margin-right: -27px;
+}
+
+.login-title{
+  margin-top: 140px;
+  font-weight: bold;
+  font-size: 30pt;
+  color:#f7941e;
+}
+
+.login-description{
+  margin-top: 50px;
+  font-size :13px;
+  color:#fa2537;
+  font-weight: bold;
+}
+
+.uni{
+  width: 142px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.btn-login{
+  display:block;
+  margin-top: 70px;
+  margin-left:auto;
+  margin-right:auto;
+  width: 30%;
+}
+
+
+.inform_describe{
+  font-size: 12pt;
+  display: inline-block;
+  width: 100%;
+  height: 142px;
+  padding: 57px 0px 0px 0px;
+}
+
+
+.inform_describe:hover{
+  background: #f5930a;
+  border: 0px;
+  color: white;
+}
+
+
+.inform_stu{
+  font-size: 16pt;
+  font-weight: bold;
+  display: inline-block;
+  width: 100%;
+  height: 124px;
+  color: #7d7d7d;
+  padding: 44px 0px 0px 0px;
+}
+
+.inform_leader{
+  font-size: 16pt;
+  font-weight: bold;
+  display: inline-block;
+  //background: #f5ae3d;
+  width: 100%;
+  height: 124px;
+  color: #7d7d7d;
+  padding: 15px 0px 0px 0px;
+}
+
+.inform_leader:hover{
+  background: #f5930a;
+  border: 0px;
+  color: white;
+}
+
+.btn-leader{
+  background: #fa5a39;
+  color: white;
+  border: 0px;
+}
+
+.btn-leader:hover{
+  background: #fa5a39;
+  color: white;
+  border: 0px;
+}
+
+
+.form-action{
+  margin-top: 100px;
+}
+
+.form-control{
+  display: inline-block;
+  margin-left:auto;
+  margin-right:auto;
+  width: 80%;
+}
+
+</style>
