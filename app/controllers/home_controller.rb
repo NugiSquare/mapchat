@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   before_action :authenticate_user!, only: [:chat, :create_chat]
   def index
     @channels = Channel.where(is_valid: true)
+    @url = request.host+':'+request.port.to_s
   end
   
   def chat
