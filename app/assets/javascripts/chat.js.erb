@@ -1,0 +1,31 @@
+var channel = dispatcher.subscribe(channel_id);
+$("#btn-input").keypress(function(event){
+  if(event.keyCode == 13){
+      $("#btn-chat").click();
+  }
+});
+$("#btn-chat").on("click", function() {
+  var msg = $("#btn-input").val();
+  channel.trigger('chat', {"channel_id" : channel_id, "content" : msg, "username" : username, "univ" : univ});
+  console.log(msg);
+  $("#btn-input").val("");
+});
+channel.bind('chat', function(msg) {
+  console.log(msg);
+  if(username != msg["username"]){
+    var sent_receive = '<div class="messages msg_receive">'
+    }
+  else{
+    var sent_receive ='<div class="messages msg_sent">'
+  }
+$("#msg_container_base").prepend('<div class="row msg_container base_receive">'+
+    '<div class="col-md-2 col-xs-2 avatar">'+
+    '</div>'+
+    '<div class="col-md-10 col-xs-10">'+
+            sent_receive +
+            '<p>' + msg["content"] + '</p>'+
+            '<time datetime="' + Date().toLocaleString()+ '"> •' + msg["univ"] +" | "+ msg["username"] + '</time>'+
+        '</div>'+
+    '</div>'+
+  '</div>');
+});

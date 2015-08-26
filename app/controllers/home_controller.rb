@@ -2,10 +2,12 @@ class HomeController < ApplicationController
   before_action :authenticate_user!, only: [:chat, :create_chat]
   def index
     @channels = Channel.where(is_valid: true)
+    @url = request.host+':'+request.port.to_s
   end
   
   def chat
     @channel = Channel.find(params[:channel_id])
+    @url = request.host+':'+request.port.to_s
     if @channel.nil?
       render text: "채팅방이 없어졌습니다..."
     end

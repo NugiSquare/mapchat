@@ -3,7 +3,6 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body {
-  min-height: 2000px;
 }
 
 .navbar-static-top {
@@ -17,3 +16,50 @@ body {
   border-style: solid;
   border-width: 1px;
 }
+
+/* 현재 페이지 CSS 입니다. 추후 render로 빼두는 편이 나을것 같습니다. */
+/**전체채팅창start**/
+.mbody{
+}
+.container-fluid{
+  padding-left:0px;
+  padding-right:0px;
+}
+.allchat_div{
+  padding:0px;
+}
+.allchat{
+  width:100%;
+  padding:0px;
+}
+
+#allchat_current{
+  height: 80px;
+  background-color:#E8D4D4;
+  
+}  
+
+#allchat_content{
+  background-color:#fff;
+}
+
+#allchat_input{
+  height: 150px;
+  background-color:#3366FF;
+}
+
+.text_color {
+  color: white
+}
+
+/*전체채팅 쌓이도록*/
+
+
+
+#msg_container_base{
+  display:flex;
+  flex-direction:column-reverse;
+}
+
+/*end*/
+

@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= stylesheet_link_tag    'home', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAtZeWmQ7w9Wx4pY_6skY932Hte3XlySls"></script>
@@ -17,6 +18,7 @@
   
 </head>
 <body>
+
   <!-- Static navbar -->
   <nav class="navbar navbar-default navbar-static-top" style="background-color:#093052; font-weight:bold;  margin-bottom: 0px;">
     <div class="container-fluid">
@@ -29,7 +31,7 @@
           </center>
           </div>
           <div class="col-md-3">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav" style="">
               <% if current_user.nil? %>
               <li><a href="/users/sign_in"><span class="top_text">Sign in</span></a></li>
               <% else%>
@@ -39,10 +41,8 @@
           </div>
         </div>
       </div>
-
-      <!--/.nav-collapse -->
-
   </nav>
+  <!--/.nav-collapse -->
 
   <%= yield %>
   

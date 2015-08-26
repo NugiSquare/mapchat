@@ -1,59 +1,56 @@
-<!---->
 <div class="container-fluid">
-  <div class="row mbody">
-    <div class="allchat_div" style="width:25%; float:left;"><!---------------------------------------------------전체 채팅-->
-      <div><!--current_user.count-->
+  <div class="mbody">
+    <div class="allchat_div" style="margin:0 auto; width:25%; float:left;">
+      <!--current_user.count-->
+      <div>  
       </div>
       
-      <div class="allchat" id="allchat_content"><!--chat content-->
-        <ul id="logs">
-        </ul>
-      </div>
+      <!--chat content-->
+      <div class="allchat" id="allchat_content">
+        <div class="row chat-window" id="chat_window_1" style="margin:10px; height:100%; position: relative;">
+          <div class="col-xs-12 col-md-12" style="padding:0px; height:100%">
+            <div class="panel panel-default" style="height:100%">
+              <!-- 채팅제목BAR START -->
+              <div class="panel-heading top-bar">
+                <div class="col-md-8 col-xs-8">
+                  <h3 class="panel-title" style="color:white;">
+                    <i class="fa fa-weixin" style="color:#f39800;"></i>전체채팅
+                  </h3>
+                </div>
+                <div class="col-md-4 col-xs-4" style="text-align: right;">
+                  <a href="#"><i id="minim_chat_window" class="fa fa-minus" style="color:white;"></i></a>
+                  <a href="#" style="padding-left:10px;"><i class="fa fa-times" data-id="chat_window_1" style="color:white;"></i></a>
+                </div>    
+              </div>
+              <!-- 채팅제목BAR END -->
+              <!-- msg_container_base for javascript messages to stack -->
+              <div class="panel-body msg_container_base" id="msg_container_base" style="height:558px">
 
-      <!--<div class="allchat" id="allchat_input">-->
-      <!--채팅 입력하는 곳 (chat input)-->
-      
-      
-        <!--<textarea style="margin:10px 0px 5px 23px; width:73%; height:90px; resize: none; border-top-left-radius: 10px; border-bottom-left-radius: 10px;float:left;"></textarea>-->
-        <!--<input type="submit" name="" value="전송" style="margin:10px 0px 15px 0px; height:90px; border-top-right-radius:10px; border-bottom-right-radius:10px; overflow:hidden;border:none;width: 17%;background-color:#F7931D;">-->
-        <div class="panel-footer" style="height:100px;">
-          <div class="input-group"style="margin-left: 10px;">
-            <div class="row">
-              <div class="col-md-10">
-                <textarea class="form-control" rows="3"  style="margin:10px 0px 5px 23px; padding: 0px 0px 0px 0px; width:73%; border-top-left-radius: 10px; border-bottom-left-radius: 10px; resize: none; float:left;" id="btn-input"></textarea>
               </div>
-              <div class="col-md-2">
-                <input type="submit" class="btn btn-likelion btn-md" id="btn-chat" style="margin:10px 0px 15px 0px; height:72px; overflow:hidden; border-top-right-radius:10px; border-bottom-right-radius:10px;">전송!!</input>
+              <!-- msg_container END -->
+              <!-- 채팅입력창 START -->
+              <div class="panel-footer">
+                <div class="input-group">
+                <input  type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." id="btn-input" />
+                <span class="input-group-btn">
+                 <input type="submit" class="btn btn-likelion btn-sm" id="btn-chat" value="전송"></input>
+                </span>
+                </div>
               </div>
+              <!-- 채팅입력창 END -->
             </div>
-              <!--<input id="btn-input" type="textarea"rows="3" class="form-control input-md chat_input" placeholder="Write your message here..." />-->
-              <!--<span class="input-group-btn">-->
-              <!--<input type="submit" class="btn btn-likelion btn-md" id="btn-chat">전송!!</button>-->
           </div>
         </div>
-      <!--</div>-->
+      </div>
     </div>
-    
-    <div class="" style="width:75%; padding:0px; overflow:hidden;"><!---------------------------------------------------구글 맵---->
-    <div style="width: 100%; height: 100%;">
-         <div id="map" style="height: 900px;"></div>
-    </div>
-        
-      <!--구글 맵 들어가는 부분-->
+       
+    <div class="google_map_api" style="margin:0 auto; width:75%; display:inline;">
+      <div style="width: 100%; height: 100%;">
+           <div id="map" style="height: 660px;"></div>
+      </div>       
     </div>
   </div>
 </div> <!-- /container -->
-<!--여기부터 채팅-->
-<!--<div class="col-lg-12">-->
-<!--  <h1>Chat</h1>-->
-<!--  <input type="text" id="msg_text">-->
-<!--  <input type="submit" id="send">-->
-<!--</div>-->
-<!--<div class="col-lg-12">-->
-<!--  <h1>Logs</h1>-->
-<!--  <ul id="logs">-->
-<!--  </ul>-->
-<!--</div>-->
 
 <div class="modal fade">
   <div class="modal-dialog">
@@ -77,86 +74,16 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<script>
-  var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
-  var username = "<%= current_user ? current_user.username : "손님" %>";
-  var channel = dispatcher.subscribe("1");
-  <%if user_signed_in?%>
-    var univ = "<%=current_user.univ%>"
-  <%end%>
-  $("#btn-input").keypress(function(event){
-    if(event.keyCode == 13){
-        $("#btn-chat").click();
-    }
-  });
-  $("#btn-chat").on("click", function() {
-    var msg = $("#btn-input").val();
-    channel.trigger('chat', {"channel_id" : 1, "content" : msg, "username" : username, "univ" : univ});
-    $("#btn-input").val("");
-  });
-    
-  channel.bind('chat', function(msg) {
-    console.log(msg);
-    $("#logs").prepend('<li>'+ msg["channel_id"] + " | " + msg["univ"] +" | "+ msg["username"] + ': ' + msg["content"] + '[' + Date().toLocaleString() + ']</li>');
-  });
+<!-- WebSocket Javascript -->
+<script type="text/javascript">
+  var dispatcher = new WebSocketRails('<%= @url %>' + '/websocket');
+  var username =  '<%= current_user ? current_user.username : "손님" %>';
+  var channel_id = '1';
+  var univ = '<%= current_user ? current_user.univ : "" %>';
 </script>
+<%= javascript_include_tag 'chat' %>
 
-
-<style>/* 현재 페이지 CSS 입니다. 추후 render로 빼두는 편이 나을것 같습니다. */
-/**전체채팅창start**/
-.mbody{
-  height:900px;
-}
-.container-fluid{
-  height:100%;
-  padding-left:0px;
-  padding-right:0px;
-}
-.allchat_div{
-  padding:0px;
-}
-.allchat{
-  width:100%;
-  padding:0px;
-}
-
-#allchat_current{
-  height: 80px;
-  background-color:#E8D4D4;
-  
-}  
-
-#allchat_content{
-  height: 670px;
-  background-color:#fff;
-}
-
-#allchat_input{
-  height: 150px;
-  background-color:#3366FF;
-}
-
-.text_color {
-  color: white
-}
-
-/*전체채팅 쌓이도록*/
-
-
-
-ul {
-    transform: rotate(180deg);
-}
-ul > li {
-    transform: rotate(-180deg);
-}
-
-
-/*end*/
-
-
-</style>
-
+<!-- Google Maps API -->
 <script type="text/javascript">
 function initialize() {
   var mapOptions = {

@@ -14,10 +14,10 @@
 ActiveRecord::Schema.define(version: 20150825084716) do
 
   create_table "channels", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "title"
-    t.string   "lat"
-    t.string   "lng"
+    t.integer  "user_id",                   null: false
+    t.string   "title",                     null: false
+    t.string   "lat",                       null: false
+    t.string   "lng",                       null: false
     t.boolean  "is_valid",   default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
