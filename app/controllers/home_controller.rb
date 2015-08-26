@@ -6,6 +6,7 @@ class HomeController < ApplicationController
   
   def chat
     @channel = Channel.find(params[:channel_id])
+    @url = request.host+':'+request.port.to_s
     if @channel.nil?
       render text: "채팅방이 없어졌습니다..."
     end

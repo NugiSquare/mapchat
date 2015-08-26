@@ -4,7 +4,7 @@ Channel.create(user_id: 1, title: "전체방", lat: "37", lng: "132")
 @data_hash = Hash.new
 path=Rails.root.to_s
 
-file = File.read(path+'/public/userdb1.json')
+file = File.read(path+'/app/controllers/userdb1.json')
 @data_hash = JSON.parse(file)
 
 for x in 0..537

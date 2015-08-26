@@ -1,290 +1,68 @@
-<!--여기부터 채팅-->
-<!--
-<div class="col-lg-12">
-  <h1>Chat</h1>
-  <input type="text" id="msg_text">
-  <input type="submit" id="send">
-</div>
-<div class="col-lg-12">
-  <h1>Logs</h1>
-  <ul id="logs">
-  </ul>
-</div>
-
-<!--<% if current_user.id == @channel.user_id %>-->
-    <a href="/home/destroy_chat/<%=@channel.id%>">방 폭파</a>
-<!--<% end %>-->
-<!-- 이하 새로 들어올 것-->
-<% if flash[:alert] %>
-<h1><%=flash[:alert]%></h1>
-<% end %>
-<section>
- <div class="row chat-window" id="chat_window_1" style="padding:0px height:100% width:100% position: relative;">
-            <div class="col-xs-12 col-md-12" style="padding:0px;">
-            	<div class="panel panel-default">
-            	      <!-- 채팅제목BAR START -->
-                    <div class="panel-heading top-bar">
-                        <div class="col-md-8 col-xs-8">
-                            <h3 class="panel-title" style="color:white;"><i class="fa fa-weixin" style="color:#f39800;"></i> <%=@channel.title%></h3>
-                        </div>
-                        <div class="col-md-4 col-xs-4" style="text-align: right;">
-                            <a href="#"><i id="minim_chat_window" class="fa fa-minus" style="color:white;"></i></a>
-                            <a href="#" style="padding-left:10px;"><i class="fa fa-times" data-id="chat_window_1" style="color:white;"></i></a>
-                        </div>
-                    </div>
-                    <!-- 채팅제목BAR END -->
-                    <div class="panel-body msg_container_base" id="msg_container_base">
-
-                    </div>
-                    <!-- 채팅입력창 START -->
-                    <div class="panel-footer">
-                        <div class="input-group">
-                            <input  type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." id="btn-input" />
-                            <span class="input-group-btn">
-                            <input type="submit" class="btn btn-likelion btn-sm" id="btn-chat" value="전송!!"></input>
-                            </span>
-                        </div>
-                    </div>
-                    <!-- 채팅입력창 END -->
-        		</div>
-            </div>
-        </div>
-        </section>
-
-<script>
-  var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
-  var username =  "<%= current_user.username %>";
-  var channel = dispatcher.subscribe("<%=@channel.id%>");
-  var univ = "<%=current_user.univ%>";
-  $("#btn-input").keypress(function(event){
-    if(event.keyCode == 13){
-        $("#btn-chat").click();
-    }
-  });
-  $("#btn-chat").on("click", function() {
-    var msg = $("#btn-input").val();
-    channel.trigger('chat', {"channel_id" : "<%=@channel.id%>", "content" : msg, "username" : username, "univ" : univ});
-    console.log(msg);
-    $("#btn-input").val("");
-  });
-    channel.bind('chat', function(msg) {
-      console.log(msg);
-    $("#msg_container_base").prepend(
-      '<div class="row msg_container base_receive">\
-        <div class="col-md-2 col-xs-2 avatar"> \
-        </div>\
-        <div class="col-md-10 col-xs-10">\
-            <% if current_user.username %>
-              <div class="messages msg_receive">\
-            <% else %>
-              <div class="messages msg_sent">\
-            <% end %>
-                <p>' + msg["channel_id"] +  '  | ' + msg["content"] + '</p>\
-                <time datetime="' +Date().toLocaleString()+ '"> •' + msg["univ"] +" | "+ msg["username"] + '</time>\
-            </div>\
-        </div>\
-      </div>');
-    });
-  <% if flash[:closed] %>
-    window.close();
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="/serengeticon.png" /> <%# 파비콘 설정 %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= stylesheet_link_tag    'chat', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAtZeWmQ7w9Wx4pY_6skY932Hte3XlySls"></script>
+    <script src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
+  </head>
+  <body>
+  <!-- Flash -->
+  <% if flash[:alert] %>
+    <h1><%=flash[:alert]%></h1>
   <% end %>
-</script>
+  <section>
+    <div class="row chat-window" id="chat_window_1" style="padding:0px; height:100%; position: relative;">
+      <div class="col-xs-12 col-md-12" style="padding:0px;">
+        <div class="panel panel-default">
+          <!-- 채팅제목BAR START -->
+          <div class="panel-heading top-bar">
+            <div class="col-md-8 col-xs-8">
+              <h3 class="panel-title" style="color:white;">
+                <i class="fa fa-weixin" style="color:#f39800;"></i><%=@channel.title%>
+              </h3>
+            </div>
+            <div class="col-md-4 col-xs-4" style="text-align: right;">
+              <a href="#"><i id="minim_chat_window" class="fa fa-minus" style="color:white;"></i></a>
+              <a href="#" style="padding-left:10px;"><i class="fa fa-times" data-id="chat_window_1" style="color:white;"></i></a>
+              <!-- destroy_chat -->
+              <% if current_user.id == @channel.user_id %>
+                <a href="/home/destroy_chat/<%=@channel.id%>">방 폭파</a>
+              <% end %>  
+            </div>    
+          </div>
+          <!-- 채팅제목BAR END -->
+          <!-- msg_container_base for javascript messages to stack -->
+          <div class="panel-body msg_container_base" id="msg_container_base">
 
-<style>
-  
-
-section{
-    position: fixed;
-    bottom: 0;
-}
-section .col-md-2, .col-md-10{
-    padding:0;
-}
-section .panel{
-    margin-bottom: 0px;
-}
-.chat-window{
-    bottom:0;
-    /*position:fixed;*/
-    float:right;
-    
-}
-.chat-window > div > .panel{
-    border-radius: 5px 5px 0 0;
-}
-.icon_minim{
-    padding:2px 10px;
-}
-.msg_container_base{
-  background: #f5f5f5;
-  margin: 0;
-  padding: 0 10px 10px;
-  max-height:300px;
-  overflow-x:hidden;
-}
-.top-bar {
-  background: #666;
-  color: white;
-  padding: 10px;
-  position: relative;
-  overflow: hidden;
-}
-.msg_receive{
-    padding-left:0;
-    margin-left:0;
-}
-.msg_sent{
-    padding-bottom:20px !important;
-    margin-right:0;
-}
-.messages {
-  background: white;
-  padding: 10px;
-  border-radius: 2px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  max-width:100%;
-}
-.messages > p {
-    font-size: 13px;
-    margin: 0 0 0.2rem 0;
-  }
-.messages > time {
-    font-size: 11px;
-    color: #ccc;
-}
-.msg_container {
-    padding: 10px;
-    overflow: hidden;
-    display: flex;
-}
-img {
-    display: block;
-    width: 100%;
-}
-.avatar {
-    position: relative;
-}
-.base_receive > .avatar:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 0;
-    height: 0;
-    border: 5px solid #FFF;
-    border-left-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-}
-
-.base_sent {
-  justify-content: flex-end;
-  align-items: flex-end;
-}
-.base_sent > .avatar:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border: 5px solid white;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    box-shadow: 1px 1px 2px rgba(black, 0.2); // not quite perfect but close
-}
-
-.msg_sent > time{
-    float: right;
-}
-
-
-
-.msg_container_base::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
-}
-
-.msg_container_base::-webkit-scrollbar
-{
-    width: 12px;
-    background-color: #F5F5F5;
-}
-
-.msg_container_base::-webkit-scrollbar-thumb
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #555;
-}
-
-.btn-group.dropup{
-    position:fixed;
-    left:0px;
-    bottom:0;
-}
-
-
-/* New code for our sevice START*/
-.btn-likelion { 
-  color: #FFFFFF; 
-  background-color: #F39800; 
-  border-color: #F39800; 
-} 
- 
-.btn-likelion:hover, 
-.btn-likelion:focus, 
-.btn-likelion:active, 
-.btn-likelion.active, 
-.open .dropdown-toggle.btn-likelion { 
-  color: #FFFFFF; 
-  background-color: #DE9210; 
-  border-color: #F39800; 
-} 
- 
-.btn-likelion:active, 
-.btn-likelion.active, 
-.open .dropdown-toggle.btn-likelion { 
-  background-image: none; 
-} 
- 
-.btn-likelion.disabled, 
-.btn-likelion[disabled], 
-fieldset[disabled] .btn-likelion, 
-.btn-likelion.disabled:hover, 
-.btn-likelion[disabled]:hover, 
-fieldset[disabled] .btn-likelion:hover, 
-.btn-likelion.disabled:focus, 
-.btn-likelion[disabled]:focus, 
-fieldset[disabled] .btn-likelion:focus, 
-.btn-likelion.disabled:active, 
-.btn-likelion[disabled]:active, 
-fieldset[disabled] .btn-likelion:active, 
-.btn-likelion.disabled.active, 
-.btn-likelion[disabled].active, 
-fieldset[disabled] .btn-likelion.active { 
-  background-color: #F39800; 
-  border-color: #F39800; 
-} 
- 
-.btn-likelion .badge { 
-  color: #F39800; 
-  background-color: #FFFFFF; 
-}
-
-
-.panel-default>.panel-heading {
-    color: #333;
-    background-color: #272b30;
-    border-color: #ddd;
-}
-
-.panel-footer {
-    padding: 10px 15px;
-    background-color: #272b30;
-    border-top: 1px solid #ddd;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
-/* New code for our sevice END */
-</style>
+          </div>
+          <!-- msg_container END -->
+          <!-- 채팅입력창 START -->
+          <div class="panel-footer">
+            <div class="input-group">
+            <input  type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." id="btn-input" />
+            <span class="input-group-btn">
+             <input type="submit" class="btn btn-likelion btn-sm" id="btn-chat" value="전송!!"></input>
+            </span>
+            </div>
+          </div>
+          <!-- 채팅입력창 END -->
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- WebSocket Javascript -->
+  <script type="text/javascript">
+    <% if flash[:closed] %> window.close(); <% end %>
+    var dispatcher = new WebSocketRails('<%= @url %>' + '/websocket');
+    var username =  '<%= current_user.username %>';
+    var channel_id = '<%=@channel.id%>';
+    var univ = "<%=current_user.univ%>";
+  </script>
+  <%= javascript_include_tag 'chat' %>
+  </body>
+</html>
