@@ -9,6 +9,7 @@ class HomeController < ApplicationController
     if @channel.nil?
       render text: "채팅방이 없어졌습니다..."
     end
+    render layout: false
   end
   
   #채팅생성
@@ -33,4 +34,5 @@ class HomeController < ApplicationController
     end
     redirect_to :back
   end
+
 end

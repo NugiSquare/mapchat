@@ -80,8 +80,10 @@
 <script>
   var dispatcher = new WebSocketRails('chatting-cycorld.c9.io/websocket');
   var username = "<%= current_user ? current_user.username : "손님" %>";
-  var channel = dispatcher.subscribe("1");  
-  var univ = "<%=current_user.univ%>"
+  var channel = dispatcher.subscribe("1");
+  <%if user_signed_in?%>
+    var univ = "<%=current_user.univ%>"
+  <%end%>
   $("#btn-input").keypress(function(event){
     if(event.keyCode == 13){
         $("#btn-chat").click();
